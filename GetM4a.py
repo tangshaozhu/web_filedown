@@ -1,8 +1,6 @@
 """
-Created on Tue Nov 20 09:50:26 2018
-@author: weiyx15
-Automated downloading all data links from 
-http://nemweb.com.au/Reports/Current/Next_Day_Offer_Energy/
+Created on 2019-4-20
+@author: tsz
 """
 import re
 import os
