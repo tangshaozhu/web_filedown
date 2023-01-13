@@ -27,7 +27,7 @@ def get_source_by_url_ex(url:str):
     chrome.get(url)
     return chrome.page_source
 
-def web_file_down(patstr, url, path):
+def web_file_down(patstr, url, path, rename):
     htmlStr = get_source_by_url_ex(url)
     pat = re.compile(patstr)
     urlList = re.findall(pat, htmlStr)
@@ -39,13 +39,16 @@ def web_file_down(patstr, url, path):
     if not os.path.exists(path):
         os.makedirs(path)
     file = requests.get(urlList[0])
-    filename = get_filename_by_link(urlList[0])
+    if rename:
+        filename = rename + '.mp3'
+    else:
+        filename = get_filename_by_link(urlList[0])
     with open(os.path.join(path, filename), 'wb') as code:
         code.write(file.content)
 
 
-def _5sing_file_down(url, path):
-    web_file_down(_5sing_patstr, url, path)
+def _5sing_file_down(url, path, rename=None):
+    web_file_down(_5sing_patstr, url, path, rename)
 
 
 def get_filename_by_link(fileurl: str):
@@ -53,8 +56,8 @@ def get_filename_by_link(fileurl: str):
 
 
 def get_config(jsonfile):
-    with open(jsonfile, 'r') as f:
-        cfg = json.loads(f)
+    with open(jsonfile, 'r', encoding='utf-8') as f:
+        cfg = json.load(f)
     return cfg
 
 
@@ -66,7 +69,8 @@ if __name__ == "__main__":
         path = os.getcwd()
     if len(sys.argv) == 1:
         url = input('Enter Url:\n')
-        _5sing_file_down(url, path)
+        rename = input('Enter file name:\n')
+        _5sing_file_down(url, path, rename)
     else:
         for url in sys.argv[1:]:
             try:
